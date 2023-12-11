@@ -1,6 +1,7 @@
 package com.notyficationsystem.NotyficationSystem.rest;
 
 import com.notyficationsystem.NotyficationSystem.model.Contact;
+import com.notyficationsystem.NotyficationSystem.model.MessageTemplate;
 import com.notyficationsystem.NotyficationSystem.model.User;
 import com.notyficationsystem.NotyficationSystem.service.impl.*;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,7 @@ public class NotifyController {
     @Autowired
     private CSVServiceImpl CSVservice;
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private MessageTemplateServiceImpl messageTemplateService;
 
     @PostMapping(value = "exportAll")
     public void importAll(@RequestParam("file") MultipartFile file){
@@ -42,40 +43,23 @@ public class NotifyController {
     }
 
     @GetMapping(value = "notifyAll")
-    @PreAuthorize("isAuthenticated()")
-    public void notifyAll(@RequestParam("text") String text, Authentication authentication){
+    public void notifyAll(@RequestParam("message_id") Integer id, Authentication authentication){
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         log.info("ready to notify all contacts");
         List<Contact> people = contactService.getAll();
 
         for (Contact contact:
                 people) {
-            if (Objects.equals(userService.readByEmail(userDetails.getUsername()).getId(), contact.getUser().getId())){
-                emailSenderService.sendEmail(contact.getEmail(),"Emergency Notify ",text);
+            User checkUser = userService.readByEmail(userDetails.getUsername());
+            if (Objects.equals(checkUser.getId(), contact.getUser().getId())){
+                String textMessage = messageTemplateService.readById(Long.valueOf(id)).getTemplateText();
+                String finalText = textMessage.replace("{{username}}", checkUser.getFullname());
+                emailSenderService.sendEmail(contact.getEmail(),"Emergency Notify ", finalText);
             }
             else{
                 log.warn("this is not your contact "+contact.getEmail());
             }
         }
     }
-
-    @GetMapping("/")
-    public void test1(){
-        log.info("ready to notify all contacts");
-        List<Contact> people = contactService.getAll();
-
-        for (Contact contact:
-                people) {
-            emailSenderService.sendEmail(contact.getEmail(),"Emergency Notify ", "test1");
-        }
-    }
-
-    @GetMapping("/sex")
-    public String test(){
-        List<User> list =
-        userService.getAll();
-        return "fuck pinguins";
-    }
-
 
 }

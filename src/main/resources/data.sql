@@ -11,10 +11,24 @@ VALUES
     (1, 1, 'Hahua', '2gagua121@gmail.com', '+111111111', 1111),
     (2, 2, 'Panas', '123tapedope@gmail.com', '+222222222', 2222);
 
+
+-- message templates
+INSERT INTO message_templates (template_id, template_text, user_id) VALUES
+    (1, 'Hello, {{username}}! i wish you a happy Christmas.', 1),
+    (2, 'Welcome, {{username}}! See you later ;D.', 1);
+
+INSERT INTO message_templates (template_id, template_text, user_id) VALUES
+    (3, 'Hello, {{username}}! Your account has been successfully created.', 2),
+    (4, 'Welcome, {{username}}! We hope you enjoy your time with us.', 2);
+
+
+
+
 SELECT * from users
 
 SELECT * from contacts
 
+SELECT * from message_templates
 
 UPDATE users
 SET password = '$2a$10$9wZIWkCmQImYFFcQG9jzwuG/C3ceRZgAXxK9sLla5hXR6/TA7.s/m'

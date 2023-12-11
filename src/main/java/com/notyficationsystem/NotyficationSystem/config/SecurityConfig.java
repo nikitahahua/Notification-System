@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/home").permitAll()
                         .anyRequest().authenticated()
-                ).httpBasic(withDefaults());
+                ).httpBasic(withDefaults()).csrf().disable();
 
         return http.build();
     }
