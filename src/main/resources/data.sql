@@ -1,15 +1,16 @@
 -- Пример вставки пользователей в таблицу Users
-INSERT INTO users (id, fullname, email, role, phone_number, password, chat_id)
+INSERT INTO users (id, fullname, email, role, password, enabled)
 VALUES
-    (1, 'John Doe', 'john.doe@example.com', 0, '+123456789', '$2a$10$9wZIWkCmQImYFFcQG9jzwuG/C3ceRZgAXxK9sLla5hXR6/TA7.s/m', 123456),
-    (2, 'Alice Smith', 'alice.smith@example.com', 1, '+987654321', '$2a$10$6amiq//ceZY/SY/3THOQSeOGifq35cFHKZPM8uZizf7vEKvN74dQq', 789012);
+    (1, 'John Doe', 'john.doe@example.com', 0, '$2a$10$9wZIWkCmQImYFFcQG9jzwuG/C3ceRZgAXxK9sLla5hXR6/TA7.s/m', true),
+    (2, 'Alice Smith', 'alice.smith@example.com', 1, '$2a$10$6amiq//ceZY/SY/3THOQSeOGifq35cFHKZPM8uZizf7vEKvN74dQq', true);
+
 --password123
 --admin123
 -- Пример вставки контактов для пользователей в таблицу Contacts
-INSERT INTO Contacts (id, user_id, contact_name, email, phone_number, chat_id)
+INSERT INTO Contacts (id, user_id, contact_name, email)
 VALUES
-    (1, 1, 'Hahua', '2gagua121@gmail.com', '+111111111', 1111),
-    (2, 2, 'Panas', '123tapedope@gmail.com', '+222222222', 2222);
+    (1, 1, 'Hahua', '2gagua121@gmail.com'),
+    (2, 2, 'Panas', '123tapedope@gmail.com');
 
 
 -- message templates
@@ -20,7 +21,6 @@ INSERT INTO message_templates (template_id, template_text, user_id) VALUES
 INSERT INTO message_templates (template_id, template_text, user_id) VALUES
     (3, 'Hello, {{username}}! Your account has been successfully created.', 2),
     (4, 'Welcome, {{username}}! We hope you enjoy your time with us.', 2);
-
 
 
 
@@ -56,3 +56,4 @@ WHERE id = 1;
 UPDATE contacts
 SET email = '123tapedope@gmail.com'
 WHERE id = 2;
+

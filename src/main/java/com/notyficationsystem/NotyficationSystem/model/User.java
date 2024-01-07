@@ -31,25 +31,20 @@ public class User implements UserDetails {
     private String email;
 
     @Enumerated(value = EnumType.ORDINAL)
-    @Column(name = "role", nullable = false, unique = true)
+    @Column(name = "role", nullable = false)
     private Role role;
 
-    @Column(name = "phone_number", nullable = false, unique = true)
-    private String phoneNumber;
-
-    @Column(name = "password", nullable = false, unique = true)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "chat_id", nullable = false, unique = true)
-    private Long chatId;
+    @Column(name = "enabled", nullable = false)
+    private boolean enabled;
 
-    public User(String fullname, String email, Role role, String phoneNumber, String password, Long chatId) {
+    public User(String fullname, String email, Role role, String password) {
         this.fullname = fullname;
         this.email = email;
         this.role = role;
-        this.phoneNumber = phoneNumber;
         this.password = password;
-        this.chatId = chatId;
     }
 
     @Override
@@ -97,7 +92,7 @@ public class User implements UserDetails {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, fullname, email, phoneNumber);
+        return Objects.hash(id, fullname, email);
     }
 
 }

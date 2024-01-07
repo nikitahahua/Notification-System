@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService {
     public User update(User person) {
         User oldPerson = userRepo.findByFullname(person.getFullname());
         oldPerson.setEmail(person.getEmail());
-        oldPerson.setPhoneNumber(person.getPhoneNumber());
         return userRepo.save(oldPerson);
     }
 
@@ -40,14 +39,6 @@ public class UserServiceImpl implements UserService {
             return userRepo.findByEmail(email);
         }
         throw new EntityNotFoundException("cant find Person by email");
-    }
-
-    @Override
-    public User readByPhone(String phoneNumber) {
-        if (phoneNumber!=null){
-            return userRepo.findByPhoneNumber(phoneNumber);
-        }
-        throw new EntityNotFoundException("cant find Person by phone");
     }
 
     @Override
@@ -72,6 +63,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(Long id) {
         userRepo.delete(readById(id));
+    }
+
+    @Override
+    public void enableUser(User user) {
+        user.setEnabled(true);
+        userRepo.save(user);
     }
 
 

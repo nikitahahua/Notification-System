@@ -26,18 +26,10 @@ public class Contact {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "phoneNumber", nullable = false, unique = true)
-    private String phoneNumber;
-
-    @Column(name = "chat_id", nullable = false, unique = true)
-    private Long chatId;
-
-    public Contact(User user, String contactName, String email, String phoneNumber, Long chatId) {
+    public Contact(User user, String contactName, String email) {
         this.user = user;
         this.contactName = contactName;
         this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.chatId = chatId;
     }
 
 }

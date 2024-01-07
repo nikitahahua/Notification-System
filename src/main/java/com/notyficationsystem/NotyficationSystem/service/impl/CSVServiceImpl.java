@@ -31,7 +31,7 @@ public class CSVServiceImpl implements CSVService {
 
     public static Contact parseContact(String CSVline, ContactServiceImpl service) {
         String[] result = CSVline.split(",\\s*");
-        return new Contact(service.readById(Long.valueOf(result[0])).getUser(), result[1], result[2], result[3], Long.valueOf(result[4]));
+        return new Contact(service.readById(Long.valueOf(result[0])).getUser(), result[1], result[2]);
     }
 
 }

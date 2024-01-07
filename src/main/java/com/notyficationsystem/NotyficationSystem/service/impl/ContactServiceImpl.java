@@ -27,7 +27,6 @@ public class ContactServiceImpl implements ContactService {
     public Contact update(Contact contact) {
         Contact oldPerson = contactRepo.findByContactName(contact.getContactName());
         oldPerson.setEmail(contact.getEmail());
-        oldPerson.setPhoneNumber(contact.getPhoneNumber());
         oldPerson.setContactName(contact.getContactName());
         return contactRepo.save(oldPerson);
     }
@@ -37,14 +36,6 @@ public class ContactServiceImpl implements ContactService {
             return contactRepo.findByEmail(email);
         }
         throw new EntityNotFoundException("cant find Person by email");
-    }
-
-    @Override
-    public Contact readByPhone(String phoneNumber) {
-        if (phoneNumber!=null){
-            return contactRepo.findByPhoneNumber(phoneNumber);
-        }
-        throw new EntityNotFoundException("cant find Person by phone");
     }
 
     @Override
@@ -58,7 +49,7 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public Contact readById(Long id) {
         return contactRepo.findById(id).orElseThrow(() ->
-                new NoSuchElementException("worng id was delivered"));
+                new NoSuchElementException("wrong id was delivered"));
     }
 
     @Override
