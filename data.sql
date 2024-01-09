@@ -6,12 +6,15 @@ VALUES
 
 --password123
 --admin123
--- Пример вставки контактов для пользователей в таблицу Contacts
+
 INSERT INTO Contacts (id, user_id, contact_name, email)
 VALUES
     (1, 1, 'Hahua', '2gagua121@gmail.com'),
     (2, 2, 'Panas', '123tapedope@gmail.com');
-
+--telegran-contacts
+INSERT INTO telegram_contacts (tg_chat_id, telegram_username, tg_user_id)
+VALUES
+    (738407885, 'nikitagagua',1);
 
 -- message templates
 INSERT INTO message_templates (template_id, template_text, user_id) VALUES
@@ -29,6 +32,8 @@ SELECT * from users
 SELECT * from contacts
 
 SELECT * from message_templates
+
+SELECT * from telegram_contacts
 
 UPDATE users
 SET password = '$2a$10$9wZIWkCmQImYFFcQG9jzwuG/C3ceRZgAXxK9sLla5hXR6/TA7.s/m'

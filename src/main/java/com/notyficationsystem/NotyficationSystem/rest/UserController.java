@@ -49,7 +49,6 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<User> updateUser(@PathVariable Long id) {
         User existingUser = userService.readById(id);
         existingUser.setEmail(userService.readById(id).getEmail());

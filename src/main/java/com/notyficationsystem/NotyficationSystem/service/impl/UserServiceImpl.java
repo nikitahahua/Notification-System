@@ -1,22 +1,25 @@
 package com.notyficationsystem.NotyficationSystem.service.impl;
 
+import com.notyficationsystem.NotyficationSystem.model.TelegramContact;
 import com.notyficationsystem.NotyficationSystem.model.User;
 import com.notyficationsystem.NotyficationSystem.repository.UserRepo;
 import com.notyficationsystem.NotyficationSystem.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
     private UserRepo userRepo;
+
+    public UserServiceImpl(UserRepo userRepo) {
+        this.userRepo = userRepo;
+    }
 
     @Override
     public User create(User person) {
@@ -30,6 +33,7 @@ public class UserServiceImpl implements UserService {
     public User update(User person) {
         User oldPerson = userRepo.findByFullname(person.getFullname());
         oldPerson.setEmail(person.getEmail());
+        oldPerson.setChatId(person.getChatId());
         return userRepo.save(oldPerson);
     }
 
@@ -58,6 +62,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAll() {
         return userRepo.findAll();
+    }
+
+    @Override
+    public Set<TelegramContact> getTelegramContactsByEmail(String email) {
+        User user = userRepo.findByEmail(email);
+        if (user == null) {
+            throw new EntityNotFoundException("User not found with email: " + email);
+        }
+        return user.getTelegramContacts();
     }
 
     @Override

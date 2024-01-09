@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
@@ -32,9 +33,11 @@ public class NotifyController {
     private MessageTemplateServiceImpl messageTemplateService;
 
     @PostMapping(value = "exportAll")
-    public void importAll(@RequestParam("file") MultipartFile file){
+    public void importAll(@RequestParam("file") MultipartFile file, Authentication authentication){
         try {
-            CSVservice.importCSV(file.getInputStream());
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            User contactUser = userService.readByEmail(userDetails.getUsername());
+            CSVservice.importCSV(file.getInputStream(), contactUser);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -1,19 +1,15 @@
 package com.notyficationsystem.NotyficationSystem.model;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import com.notyficationsystem.NotyficationSystem.model.constant.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
-@Data
+@Getter
+@Setter
 @ToString
 @Entity
 @NoArgsConstructor
@@ -39,6 +35,20 @@ public class User implements UserDetails {
 
     @Column(name = "enabled", nullable = false)
     private boolean enabled;
+
+    @Column(name = "tg_chat_id")
+    private Long chatId;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<TelegramContact> telegramContacts = new HashSet<>();
+
+    public User(String fullname, String email, Role role, String password, Long chatId) {
+        this.fullname = fullname;
+        this.email = email;
+        this.role = role;
+        this.password = password;
+        this.chatId = chatId;
+    }
 
     public User(String fullname, String email, Role role, String password) {
         this.fullname = fullname;

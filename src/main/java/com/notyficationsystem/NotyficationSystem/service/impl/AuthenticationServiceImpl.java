@@ -10,10 +10,10 @@ import com.notyficationsystem.NotyficationSystem.payload.RegisterRequest;
 import com.notyficationsystem.NotyficationSystem.payload.RegisterResponse;
 import com.notyficationsystem.NotyficationSystem.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -33,7 +33,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setFullname(registerRequest.username());
         user.setEmail(registerRequest.email());
         user.setPassword(passwordEncoder.encode(registerRequest.password()));
-        user.setRole(Role.USER);
         user.setEnabled(false);
         user.setRole(Role.USER);
         userService.create(user);
