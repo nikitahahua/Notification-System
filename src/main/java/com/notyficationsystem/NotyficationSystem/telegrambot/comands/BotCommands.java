@@ -6,8 +6,12 @@ import java.util.List;
 
 public interface BotCommands {
     List<BotCommand> LIST_OF_COMMANDS = List.of(
-            new BotCommand("/help", "bot info")
-//            ,new BotCommand("/createPattern", "bot functionality")
+            new BotCommand("/help", "bot info"),
+            new BotCommand("/template", "bot functionality"),
+            new BotCommand("/notify", "bot functionality"),
+            new BotCommand("/subscribe", "bot functionality"),
+            new BotCommand("/login", "bot functionality"),
+            new BotCommand("/register", "bot functionality")
     );
 
     String HELP_TEXT = """
