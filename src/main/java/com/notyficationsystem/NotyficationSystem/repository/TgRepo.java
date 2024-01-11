@@ -8,6 +8,7 @@ import java.util.List;
 
 @Repository
 public interface TgRepo extends JpaRepository<TelegramContact, Long> {
-    List<TelegramContact> findByTelegramUsername(String telegramUsername);
+    TelegramContact findByName(String telegramUsername);
+    TelegramContact findByEmail(String telegramUsername);
     TelegramContact findByChatId(Long chatId);
 }

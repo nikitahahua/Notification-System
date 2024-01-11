@@ -12,9 +12,13 @@ VALUES
     (1, 1, 'Hahua', '2gagua121@gmail.com'),
     (2, 2, 'Panas', '123tapedope@gmail.com');
 --telegran-contacts
-INSERT INTO telegram_contacts (tg_chat_id, telegram_username, tg_user_id)
+INSERT INTO telegram_contacts (tg_user_id, name, email)
 VALUES
-    (738407885, 'nikitagagua',1);
+    (1,'sheikh', '2gagua121@gmail.com');
+
+    INSERT INTO telegram_contacts (tg_user_id, name, email)
+VALUES
+    (1, 'Mis. ', '123tapedope@gmail.com');
 
 -- message templates
 INSERT INTO message_templates (template_id, template_text, user_id) VALUES
@@ -34,6 +38,8 @@ SELECT * from contacts
 SELECT * from message_templates
 
 SELECT * from telegram_contacts
+
+SELECT * from flyway_schema_history
 
 UPDATE users
 SET password = '$2a$10$9wZIWkCmQImYFFcQG9jzwuG/C3ceRZgAXxK9sLla5hXR6/TA7.s/m'

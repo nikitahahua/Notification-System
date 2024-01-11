@@ -38,9 +38,9 @@ public class TelegramSenderServiceImpl implements TelegramSenderService {
                 SendMessage message = new SendMessage();
                 message.setChatId(chatId.toString());
                 String textExample = text.getTemplateText();
-                textExample = textExample.replace("{{username}}", contact.getTelegramUsername());
-                message.setText(textExample);
-                log.info("notifying: "+ contact.getTelegramUsername());
+                textExample = textExample.replace("{{username}}", contact.getName());
+                message.setText(textExample + "\n from : " + from);
+                log.info("notifying: "+ contact.getName());
                 try {
                     telegramBot.execute(message);
                 } catch (TelegramApiException e) {

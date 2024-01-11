@@ -1,7 +1,7 @@
 package com.notyficationsystem.NotyficationSystem.telegrambot.service;
 
-import com.notyficationsystem.NotyficationSystem.model.User;
-import com.notyficationsystem.NotyficationSystem.payload.LoginRequest;
+import com.notyficationsystem.NotyficationSystem.model.TelegramContact;
+import com.notyficationsystem.NotyficationSystem.service.TelegramService;
 import com.notyficationsystem.NotyficationSystem.service.UserService;
 import com.notyficationsystem.NotyficationSystem.telegrambot.comands.BotCommands;
 import com.notyficationsystem.NotyficationSystem.telegrambot.config.BotConfig;
@@ -10,7 +10,6 @@ import com.notyficationsystem.NotyficationSystem.telegrambot.model.UserSession;
 import com.notyficationsystem.NotyficationSystem.telegrambot.model.UserStateCache;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -23,13 +22,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import com.google.gson.Gson;
-import org.springframework.http.HttpStatus;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,12 +30,14 @@ import java.util.List;
 public class MessageSender extends TelegramLongPollingBot implements BotCommands {
     protected final BotConfig botConfig;
     private final UserService userService;
-    @Autowired
-    private UserStateCache userStateCache;
-    public MessageSender(BotConfig botConfig, UserService userService) {
+    private final UserStateCache userStateCache;
+    private final TelegramService telegramService;
+
+    public MessageSender(BotConfig botConfig, UserService userService, UserStateCache userStateCache,  TelegramService telegramService1) {
         this.botConfig = botConfig;
         this.userService = userService;
-
+        this.userStateCache = userStateCache;
+        this.telegramService = telegramService1;
         try {
             this.execute(new SetMyCommands(LIST_OF_COMMANDS, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e) {
@@ -69,44 +63,17 @@ public class MessageSender extends TelegramLongPollingBot implements BotCommands
     public List<KeyboardRow> keyboardRows() {
         List<KeyboardRow> rows = new ArrayList<>();
 
-        KeyboardRow row1 = new KeyboardRow();
-        row1.add(new KeyboardButton("/notify"));
-        row1.add(new KeyboardButton("/addTemplate"));
-        rows.add(row1);
-
         KeyboardRow row2 = new KeyboardRow();
-        row2.add(new KeyboardButton("/subscribe"));
         row2.add(new KeyboardButton("/help"));
         rows.add(row2);
 
         KeyboardRow row3 = new KeyboardRow();
         row3.add(new KeyboardButton("/login"));
-        row3.add(new KeyboardButton("/register"));
         rows.add(row3);
 
         return rows;
     }
 
-    public List<KeyboardButton> keyboardButtons() {
-        List<KeyboardButton> buttons = new ArrayList<>();
-        KeyboardButton keyboardButton = new KeyboardButton("Create Pattern");
-        keyboardButton.setRequestLocation(true);
-        buttons.add(keyboardButton);
-        return buttons;
-    }
-
-    private void sendHelpText(long chatId, String textToSend){
-        SendMessage message = new SendMessage();
-        message.setChatId(String.valueOf(chatId));
-        message.setText(textToSend);
-
-        try {
-            execute(message);
-            log.info("Reply sent");
-        } catch (TelegramApiException e){
-            log.error(e.getMessage());
-        }
-    }
     private void startBot(long chatId, String userName) {
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));
@@ -117,10 +84,11 @@ public class MessageSender extends TelegramLongPollingBot implements BotCommands
         try {
             execute(message);
             log.info("Reply sent");
-        } catch (TelegramApiException e){
+        } catch (TelegramApiException e) {
             log.error(e.getMessage());
         }
     }
+
     @Override
     public String getBotUsername() {
         return botConfig.getBotName();
@@ -134,37 +102,23 @@ public class MessageSender extends TelegramLongPollingBot implements BotCommands
             String messageText = message.getText();
 
             switch (messageText) {
+                case "/help":
+                    sendMessage(chatId, HELP_TEXT);
+                    break;
                 case "/start":
                     startBot(chatId, message.getFrom().getFirstName());
-                    break;
-                case "/help":
-                    sendHelpText(chatId, HELP_TEXT);
-                    break;
-                case "/notify":
-                    notifyUsers(chatId);
-                    break;
-                case "/addTemplate":
-                    addTemplate(chatId);
-                    break;
-                case "/subscribe":
-                    subscribeUser(chatId);
                     break;
                 case "/login":
                     UserSession userSession = new UserSession();
                     userSession.setUserState(UserState.AWAITING_EMAIL);
-                    userStateCache.setUserSession(chatId,userSession);
-                    sendMessage(chatId, "Your chatId: "+chatId+"\nPlease enter your email: ");
+                    userStateCache.setUserSession(chatId, userSession);
+                    sendMessage(chatId, "Your chatId: " + chatId + "\nPlease enter your email: ");
                     break;
 
                 default:
                     if (userStateCache.getUserSession(chatId).getUserState() == UserState.AWAITING_EMAIL) {
                         UserSession userSessionEmailUpdate = userStateCache.getUserSession(chatId);
                         userSessionEmailUpdate.setEmail(messageText);
-                        userSessionEmailUpdate.setUserState(UserState.AWAITING_PASSWORD);
-                        sendMessage(chatId, "Please enter your password:");
-                    } else if (userStateCache.getUserSession(chatId).getUserState() == UserState.AWAITING_PASSWORD) {
-                        UserSession userSessionEmailUpdate = userStateCache.getUserSession(chatId);
-                        userSessionEmailUpdate.setPassword(messageText);
                         processLogin(chatId, userSessionEmailUpdate);
                         userSessionEmailUpdate.setUserState(UserState.NONE);
                     } else {
@@ -178,37 +132,16 @@ public class MessageSender extends TelegramLongPollingBot implements BotCommands
     }
 
     private void processLogin(long chatId, UserSession userSession) {
-        LoginRequest loginRequest = new LoginRequest(userSession.getEmail(), userSession.getPassword());
-        Gson gson = new Gson();
-        String jsonRequest = gson.toJson(loginRequest);
 
-        String url = "http://localhost:8080/auth/login";
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(jsonRequest))
-                .build();
-
-        HttpClient client = HttpClient.newHttpClient();
-
-        try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == HttpStatus.OK.value()) {
-                User user =  userService.readByEmail(userSession.getEmail());
-                user.setChatId(chatId);
-                userService.update(user);
-                sendMessage(chatId, "Success. You are subscribed");
-                return;
-            } else {
-                sendMessage(chatId, "Login failed. Please try again.");
-            }
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            sendMessage(chatId, "Error occurred during login.");
+        TelegramContact contact = telegramService.readByEmail(userSession.getEmail());
+        if (contact != null) {
+            contact.setChatId(chatId);
+            telegramService.update(contact);
+            sendMessage(chatId, "success. wait for your notification ...");
+        } else {
+            sendMessage(chatId, "cant find email\n no one wants you to be notified.. sad ass fuck..");
         }
     }
-
 
     private void sendDefaultMessage(long chatId) {
         SendMessage message = new SendMessage();
@@ -220,17 +153,6 @@ public class MessageSender extends TelegramLongPollingBot implements BotCommands
         } catch (TelegramApiException e) {
             log.error(e.getMessage());
         }
-    }
-    public void notifyUsers(long chatId) {
-
-    }
-
-    public void addTemplate(long chatId) {
-
-    }
-
-    public void subscribeUser(long chatId) {
-
     }
 
     private void sendMessage(long chatId, String text) {

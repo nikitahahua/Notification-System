@@ -20,16 +20,19 @@ public class TelegramContact {
     @Column(name = "tg_chat_id", nullable = false, unique = true)
     private Long chatId;
 
-    @Column(name = "telegram_username", nullable = false, unique = true)
-    private String telegramUsername;
+    @Column(name = "name", nullable = false, unique = true)
+    private String name;
+
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
 
     @ManyToOne
     @JoinColumn(name = "tg_user_id", nullable = false)
     private User user;
 
-    public TelegramContact(Long chatId, String telegramUsername) {
+    public TelegramContact(Long chatId, String email) {
         this.chatId = chatId;
-        this.telegramUsername = telegramUsername;
+        this.email = email;
     }
 
 }

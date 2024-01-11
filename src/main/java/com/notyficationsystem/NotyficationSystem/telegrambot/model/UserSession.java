@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserSession {
     private String email;
-    private String password;
     private UserState userState = UserState.NONE;
 }
