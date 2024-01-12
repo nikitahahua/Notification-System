@@ -29,13 +29,11 @@ import java.util.List;
 @Component
 public class MessageSender extends TelegramLongPollingBot implements BotCommands {
     protected final BotConfig botConfig;
-    private final UserService userService;
     private final UserStateCache userStateCache;
     private final TelegramService telegramService;
 
-    public MessageSender(BotConfig botConfig, UserService userService, UserStateCache userStateCache,  TelegramService telegramService1) {
+    public MessageSender(BotConfig botConfig, UserStateCache userStateCache, TelegramService telegramService1) {
         this.botConfig = botConfig;
-        this.userService = userService;
         this.userStateCache = userStateCache;
         this.telegramService = telegramService1;
         try {
@@ -102,20 +100,15 @@ public class MessageSender extends TelegramLongPollingBot implements BotCommands
             String messageText = message.getText();
 
             switch (messageText) {
-                case "/help":
-                    sendMessage(chatId, HELP_TEXT);
-                    break;
-                case "/start":
-                    startBot(chatId, message.getFrom().getFirstName());
-                    break;
-                case "/login":
+                case "/help" -> sendMessage(chatId, HELP_TEXT);
+                case "/start" -> startBot(chatId, message.getFrom().getFirstName());
+                case "/login" -> {
                     UserSession userSession = new UserSession();
                     userSession.setUserState(UserState.AWAITING_EMAIL);
                     userStateCache.setUserSession(chatId, userSession);
                     sendMessage(chatId, "Your chatId: " + chatId + "\nPlease enter your email: ");
-                    break;
-
-                default:
+                }
+                default -> {
                     if (userStateCache.getUserSession(chatId).getUserState() == UserState.AWAITING_EMAIL) {
                         UserSession userSessionEmailUpdate = userStateCache.getUserSession(chatId);
                         userSessionEmailUpdate.setEmail(messageText);
@@ -124,8 +117,7 @@ public class MessageSender extends TelegramLongPollingBot implements BotCommands
                     } else {
                         sendDefaultMessage(chatId);
                     }
-                    break;
-
+                }
             }
 
         }
@@ -165,6 +157,5 @@ public class MessageSender extends TelegramLongPollingBot implements BotCommands
             e.printStackTrace();
         }
     }
-
 
 }

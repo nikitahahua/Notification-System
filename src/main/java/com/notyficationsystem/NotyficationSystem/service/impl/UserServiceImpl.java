@@ -15,7 +15,7 @@ import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private UserRepo userRepo;
+    private final UserRepo userRepo;
 
     public UserServiceImpl(UserRepo userRepo) {
         this.userRepo = userRepo;
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(User person) {
-        User oldPerson = userRepo.findByFullname(person.getFullname());
+        User oldPerson = userRepo.findByEmail(person.getEmail());
         oldPerson.setEmail(person.getEmail());
         oldPerson.setChatId(person.getChatId());
         return userRepo.save(oldPerson);

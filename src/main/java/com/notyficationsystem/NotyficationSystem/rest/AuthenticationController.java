@@ -5,6 +5,7 @@ import com.notyficationsystem.NotyficationSystem.payload.RegisterRequest;
 import com.notyficationsystem.NotyficationSystem.payload.RegisterResponse;
 import com.notyficationsystem.NotyficationSystem.service.AuthenticationService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
