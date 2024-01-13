@@ -1,8 +1,7 @@
 package com.notyficationsystem.NotyficationSystem.telegrambot.service;
 
-import com.notyficationsystem.NotyficationSystem.model.TelegramContact;
-import com.notyficationsystem.NotyficationSystem.service.TelegramService;
-import com.notyficationsystem.NotyficationSystem.service.UserService;
+import com.notyficationsystem.NotyficationSystem.model.Contact;
+import com.notyficationsystem.NotyficationSystem.service.ContactService;
 import com.notyficationsystem.NotyficationSystem.telegrambot.comands.BotCommands;
 import com.notyficationsystem.NotyficationSystem.telegrambot.config.BotConfig;
 import com.notyficationsystem.NotyficationSystem.telegrambot.constant.UserState;
@@ -30,12 +29,12 @@ import java.util.List;
 public class MessageSender extends TelegramLongPollingBot implements BotCommands {
     protected final BotConfig botConfig;
     private final UserStateCache userStateCache;
-    private final TelegramService telegramService;
+    private final ContactService contactService;
 
-    public MessageSender(BotConfig botConfig, UserStateCache userStateCache, TelegramService telegramService1) {
+    public MessageSender(BotConfig botConfig, UserStateCache userStateCache, ContactService contactService) {
         this.botConfig = botConfig;
         this.userStateCache = userStateCache;
-        this.telegramService = telegramService1;
+        this.contactService = contactService;
         try {
             this.execute(new SetMyCommands(LIST_OF_COMMANDS, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e) {
@@ -125,10 +124,10 @@ public class MessageSender extends TelegramLongPollingBot implements BotCommands
 
     private void processLogin(long chatId, UserSession userSession) {
 
-        TelegramContact contact = telegramService.readByEmail(userSession.getEmail());
+        Contact contact = contactService.readByEmail(userSession.getEmail());
         if (contact != null) {
             contact.setChatId(chatId);
-            telegramService.update(contact);
+            contactService.update(contact);
             sendMessage(chatId, "success. wait for your notification ...");
         } else {
             sendMessage(chatId, "cant find email\n no one wants you to be notified.. sad ass fuck..");

@@ -1,16 +1,11 @@
 package com.notyficationsystem.NotyficationSystem.rest;
 
 import com.notyficationsystem.NotyficationSystem.model.Contact;
-import com.notyficationsystem.NotyficationSystem.model.MessageTemplate;
 import com.notyficationsystem.NotyficationSystem.model.User;
 import com.notyficationsystem.NotyficationSystem.service.impl.*;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.grammars.hql.HqlParser;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
@@ -21,16 +16,19 @@ import java.util.Objects;
 @Slf4j
 @RequestMapping("/")
 public class NotifyController {
-    @Autowired
-    private UserServiceImpl userService;
-    @Autowired
-    private ContactServiceImpl contactService;
-    @Autowired
-    private EmailSenderServiceImpl emailSenderService;
-    @Autowired
-    private CSVServiceImpl CSVservice;
-    @Autowired
-    private MessageTemplateServiceImpl messageTemplateService;
+    private final UserServiceImpl userService;
+    private final ContactServiceImpl contactService;
+    private final EmailSenderServiceImpl emailSenderService;
+    private final CSVServiceImpl CSVservice;
+    private final MessageTemplateServiceImpl messageTemplateService;
+
+    public NotifyController(UserServiceImpl userService, ContactServiceImpl contactService, EmailSenderServiceImpl emailSenderService, CSVServiceImpl csVservice, MessageTemplateServiceImpl messageTemplateService) {
+        this.userService = userService;
+        this.contactService = contactService;
+        this.emailSenderService = emailSenderService;
+        CSVservice = csVservice;
+        this.messageTemplateService = messageTemplateService;
+    }
 
     @PostMapping(value = "exportAll")
     public void importAll(@RequestParam("file") MultipartFile file, Authentication authentication){
@@ -41,7 +39,7 @@ public class NotifyController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        log.info("GOT HERE!! FINALLY!!");
+        log.info("everyone is notified");
 
     }
 

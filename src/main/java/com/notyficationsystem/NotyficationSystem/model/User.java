@@ -1,4 +1,5 @@
 package com.notyficationsystem.NotyficationSystem.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import com.notyficationsystem.NotyficationSystem.model.constant.Role;
@@ -10,7 +11,6 @@ import java.util.*;
 
 @Getter
 @Setter
-@ToString
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -39,8 +39,9 @@ public class User implements UserDetails {
     @Column(name = "tg_chat_id")
     private Long chatId;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private Set<TelegramContact> telegramContacts = new HashSet<>();
+    private Set<Contact> contacts = new HashSet<>();
 
     public User(String fullname, String email, Role role, String password, Long chatId) {
         this.fullname = fullname;

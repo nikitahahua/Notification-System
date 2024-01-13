@@ -1,15 +1,15 @@
-INSERT INTO users (id, fullname, email, role, password, enabled)
+INSERT INTO users (fullname, email, role, password, enabled)
 VALUES
-    (1, 'John Doe', 'john.doe@example.com', 0, '$2a$10$9wZIWkCmQImYFFcQG9jzwuG/C3ceRZgAXxK9sLla5hXR6/TA7.s/m', true),
-    (2, 'Alice Smith', 'alice.smith@example.com', 1, '$2a$10$6amiq//ceZY/SY/3THOQSeOGifq35cFHKZPM8uZizf7vEKvN74dQq', true);
+    ('John Doe', 'john.doe@example.com', 0, '$2a$10$9wZIWkCmQImYFFcQG9jzwuG/C3ceRZgAXxK9sLla5hXR6/TA7.s/m', true),
+    ('Alice Smith', 'alice.smith@example.com', 1, '$2a$10$6amiq//ceZY/SY/3THOQSeOGifq35cFHKZPM8uZizf7vEKvN74dQq', true);
 
 --password123
 --admin123
 
-INSERT INTO Contacts (id, user_id, contact_name, email)
+INSERT INTO Contacts (user_id, contact_name, email)
 VALUES
-    (1, 1, 'Hahua', '2gagua121@gmail.com'),
-    (2, 2, 'Panas', '123tapedope@gmail.com');
+    (1, 'Hahua', '2gagua121@gmail.com'),
+    (2, 'Panas', '123tapedope@gmail.com');
 --telegran-contacts
 INSERT INTO telegram_contacts (tg_user_id, name, email)
 VALUES

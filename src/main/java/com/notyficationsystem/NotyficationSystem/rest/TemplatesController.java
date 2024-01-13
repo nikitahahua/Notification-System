@@ -11,13 +11,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Slf4j
 @RequestMapping("/")
-
 public class TemplatesController {
 
-    @Autowired
-    private UserServiceImpl userService;
-    @Autowired
-    private MessageTemplateServiceImpl messageTemplateService;
+    private final UserServiceImpl userService;
+    private final MessageTemplateServiceImpl messageTemplateService;
+
+    public TemplatesController(UserServiceImpl userService, MessageTemplateServiceImpl messageTemplateService) {
+        this.userService = userService;
+        this.messageTemplateService = messageTemplateService;
+    }
 
     @PostMapping(value = "createPattern")
     public void createPattern(@RequestParam("pattern") String text, Authentication authentication){

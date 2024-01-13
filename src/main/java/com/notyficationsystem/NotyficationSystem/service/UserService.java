@@ -1,6 +1,6 @@
 package com.notyficationsystem.NotyficationSystem.service;
 
-import com.notyficationsystem.NotyficationSystem.model.TelegramContact;
+import com.notyficationsystem.NotyficationSystem.model.Contact;
 import com.notyficationsystem.NotyficationSystem.model.User;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public interface UserService {
     User readByFullName(String fullname);
     User readById(Long id);
     List<User> getAll();
-    Set<TelegramContact> getTelegramContactsByEmail(String email);
+    Set<Contact> getContactsByEmail(String email);
     void delete(Long id);
     void enableUser(User user);
 }

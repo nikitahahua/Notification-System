@@ -1,11 +1,10 @@
 package com.notyficationsystem.NotyficationSystem.service.impl;
 
-import com.notyficationsystem.NotyficationSystem.model.TelegramContact;
+import com.notyficationsystem.NotyficationSystem.model.Contact;
 import com.notyficationsystem.NotyficationSystem.model.User;
 import com.notyficationsystem.NotyficationSystem.repository.UserRepo;
 import com.notyficationsystem.NotyficationSystem.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -65,12 +64,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<TelegramContact> getTelegramContactsByEmail(String email) {
+    public Set<Contact> getContactsByEmail(String email) {
         User user = userRepo.findByEmail(email);
         if (user == null) {
             throw new EntityNotFoundException("User not found with email: " + email);
         }
-        return user.getTelegramContacts();
+        return user.getContacts();
     }
 
     @Override

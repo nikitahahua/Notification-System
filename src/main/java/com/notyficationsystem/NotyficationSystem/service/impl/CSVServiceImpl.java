@@ -3,7 +3,7 @@ package com.notyficationsystem.NotyficationSystem.service.impl;
 import com.notyficationsystem.NotyficationSystem.model.Contact;
 import com.notyficationsystem.NotyficationSystem.model.User;
 import com.notyficationsystem.NotyficationSystem.service.CSVService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.notyficationsystem.NotyficationSystem.service.ContactService;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 
@@ -12,13 +12,10 @@ import java.io.*;
 @Service
 public class CSVServiceImpl implements CSVService {
 
-    @Autowired
-    private ContactServiceImpl contactService;
-    @Autowired
-    private final TelegramLongPollingBot bot;
+    private final ContactService contactService;
 
-    public CSVServiceImpl(TelegramLongPollingBot bot) {
-        this.bot = bot;
+    public CSVServiceImpl(ContactService contactService) {
+        this.contactService = contactService;
     }
 
     public void importCSV(InputStream inputStream, User user){
@@ -26,11 +23,11 @@ public class CSVServiceImpl implements CSVService {
         BufferedReader br = new BufferedReader(inputStreamReader);
         br.lines()
                 .skip(1)
-                .map(line -> parseContact(line, contactService, user))
+                .map(line -> parseContact(line, user))
                 .forEach(contactService::create);
     }
 
-    public static Contact parseContact(String CSVline, ContactServiceImpl service, User owner) {
+    public static Contact parseContact(String CSVline, User owner) {
         String[] result = CSVline.split(",\\s*");
         return new Contact(owner, result[0], result[1]);
     }

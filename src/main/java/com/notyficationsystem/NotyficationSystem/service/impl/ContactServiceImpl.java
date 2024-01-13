@@ -13,8 +13,12 @@ import java.util.NoSuchElementException;
 @Service
 public class ContactServiceImpl implements ContactService {
 
-    @Autowired
-    private ContactRepo contactRepo;
+    private final ContactRepo contactRepo;
+
+    public ContactServiceImpl(ContactRepo contactRepo) {
+        this.contactRepo = contactRepo;
+    }
+
     @Override
     public Contact create(Contact contact) {
         if (contact != null){
@@ -25,8 +29,9 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Contact update(Contact contact) {
-        Contact oldPerson = contactRepo.findByContactName(contact.getContactName());
+        Contact oldPerson = contactRepo.findByEmail(contact.getEmail());
         oldPerson.setEmail(contact.getEmail());
+        oldPerson.setChatId(contact.getChatId());
         oldPerson.setContactName(contact.getContactName());
         return contactRepo.save(oldPerson);
     }
