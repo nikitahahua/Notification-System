@@ -29,6 +29,10 @@ public class TelegramSenderServiceImpl implements TelegramSenderService {
         if (!contacts.isEmpty()) {
             for (Contact contact : contacts) {
                 Long chatId = contact.getChatId();
+                if (chatId == null){
+                    log.warn(contact.getEmail()+ " this contact do not subscribed in telegram !");
+                    continue;
+                }
                 SendMessage message = new SendMessage();
                 message.setChatId(chatId.toString());
                 String textExample = text.getTemplateText();
