@@ -1,0 +1,361 @@
+{
+	"info": {
+		"_postman_id": "ffe1ea09-3f68-45b3-8dfe-ef9cbd5be9d5",
+		"name": "notify system endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "28709462"
+	},
+	"item": [
+		{
+			"name": "login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"john.doe@example.com\",\n    \"password\":\"password123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/auth/login"
+			},
+			"response": []
+		},
+		{
+			"name": "login as admin",
+			"request": {
+				"method": "POST",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "register",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"Hahua King\",\n    \"email\": \"zalupkoandrejf@gmail.com\",\n    \"password\": \"hhh\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/auth/register"
+			},
+			"response": []
+		},
+		{
+			"name": "confirm accoint",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "exportAll",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTcwNTE3MjE3MiwiZXhwIjoxNzA2MzcyMTcyfQ.M2i57VmbZ0bVhGcOgdxixzoxITEGeqE2PQiv2H_v4cA"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/nikitagagua/Desktop/NotyficationSystem/src/main/resources/People.csv"
+						}
+					]
+				},
+				"url": "http://localhost:8081/exportAll"
+			},
+			"response": []
+		},
+		{
+			"name": "notify all",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "notify tg",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTcwNTE3NzU2MCwiZXhwIjoxNzA2Mzc3NTYwfQ.u_X2vh0otoiZAQj3_1HGjCc59fY5y8GugCdP4sT35ZI"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "message_id",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8081/telegram/sendNotification"
+			},
+			"response": []
+		},
+		{
+			"name": "notify email",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTcwNDc0MDE1NSwiZXhwIjoxNzA1OTQwMTU1fQ.Yj1PIGGbB9d68xQBI5wnJ64CvcYq_fCPtw4OIbQIOMs"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "message_id",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8081/email/sendNotification"
+			},
+			"response": []
+		},
+		{
+			"name": "create Pattern",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTcwNTE4MTQwNCwiZXhwIjoxNzA2MzgxNDA0fQ.RFT--WxA3rtZhUKU15QOlJeTYrrUeQJxAhebm1gxwe0"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"url": "http://localhost:8081/see-my-templates"
+			},
+			"response": []
+		},
+		{
+			"name": "see my templates Copy",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "admin123",
+						"username": "alice.smith@example.com"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/getAllPattens"
+			},
+			"response": []
+		},
+		{
+			"name": "get all templates",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "admin123",
+						"username": "alice.smith@example.com"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/getAllPattens"
+			},
+			"response": []
+		},
+		{
+			"name": "get user by id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTcwNTE4MTQwNCwiZXhwIjoxNzA2MzgxNDA0fQ.RFT--WxA3rtZhUKU15QOlJeTYrrUeQJxAhebm1gxwe0"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8081/users/1"
+			},
+			"response": []
+		},
+		{
+			"name": "update user by id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTcwNTE4MjI5NywiZXhwIjoxNzA2MzgyMjk3fQ.bUKgPPRgj7IokToDYt9seSWOWhtvHDXM8NI_8bjcsdA"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"fullname\": \"test user\",\n  \"email\": \"test@example.com\",\n  \"role\": \"USER\",\n  \"password\": \"password123\",\n  \"enabled\": false,\n  \"tg_chat_id\": null\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8081/users/1"
+			},
+			"response": []
+		},
+		{
+			"name": "get all users",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "get user by email",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTcwNTE4MjI5NywiZXhwIjoxNzA2MzgyMjk3fQ.bUKgPPRgj7IokToDYt9seSWOWhtvHDXM8NI_8bjcsdA"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8081/users/email/john.doe@example.com"
+			},
+			"response": []
+		},
+		{
+			"name": "delete user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTcwNTE4MjI5NywiZXhwIjoxNzA2MzgyMjk3fQ.bUKgPPRgj7IokToDYt9seSWOWhtvHDXM8NI_8bjcsdA"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": "http://localhost:8081/users/1"
+			},
+			"response": []
+		},
+		{
+			"name": "get all contacts",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTcwNTE4MjI5NywiZXhwIjoxNzA2MzgyMjk3fQ.bUKgPPRgj7IokToDYt9seSWOWhtvHDXM8NI_8bjcsdA"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8081/contacts/all"
+			},
+			"response": []
+		},
+		{
+			"name": "get contact by id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTcwNTE4MjI5NywiZXhwIjoxNzA2MzgyMjk3fQ.bUKgPPRgj7IokToDYt9seSWOWhtvHDXM8NI_8bjcsdA"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/contacts/email/?email=alice.smith@example.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"contacts",
+						"email",
+						""
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "alice.smith@example.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete contact",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTcwNTE4MjI5NywiZXhwIjoxNzA2MzgyMjk3fQ.bUKgPPRgj7IokToDYt9seSWOWhtvHDXM8NI_8bjcsdA"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/contacts/?id=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"contacts",
+						""
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
