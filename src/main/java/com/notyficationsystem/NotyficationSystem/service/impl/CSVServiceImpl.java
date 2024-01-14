@@ -5,7 +5,6 @@ import com.notyficationsystem.NotyficationSystem.model.User;
 import com.notyficationsystem.NotyficationSystem.service.CSVService;
 import com.notyficationsystem.NotyficationSystem.service.ContactService;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 
 import java.io.*;
 

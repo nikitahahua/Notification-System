@@ -51,7 +51,7 @@ public class NotifyController {
 
     }
 
-    @GetMapping(value = "email/sendNotification")
+    @GetMapping("email/sendNotification")
     public ResponseEntity<?> notifyEmail(@RequestParam("message_id") Integer id, Authentication authentication){
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         log.info("ready to notify all contacts");
@@ -72,7 +72,7 @@ public class NotifyController {
         return ResponseEntity.ok("Notification sent ");
     }
 
-    @PostMapping("telegram/sendNotification")
+    @GetMapping("telegram/sendNotification")
     public ResponseEntity<?> sendNotification(@RequestParam("message_id") Integer id, Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User checkUser = userService.readByEmail(userDetails.getUsername());

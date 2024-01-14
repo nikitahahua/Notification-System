@@ -21,7 +21,7 @@ public class TemplatesController {
         this.messageTemplateService = messageTemplateService;
     }
 
-    @PostMapping(value = "createPattern")
+    @PutMapping(value = "createPattern")
     public void createPattern(@RequestParam("pattern") String text, Authentication authentication){
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         MessageTemplate messageTemplate = new MessageTemplate(text, userService.readByEmail(userDetails.getUsername()));

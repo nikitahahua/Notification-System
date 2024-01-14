@@ -2,32 +2,26 @@ package com.notyficationsystem.NotyficationSystem.rest;
 
 import com.notyficationsystem.NotyficationSystem.model.User;
 import com.notyficationsystem.NotyficationSystem.service.ConfirmationTokenService;
-import com.notyficationsystem.NotyficationSystem.service.JwtService;
 import com.notyficationsystem.NotyficationSystem.service.UserService;
-import com.notyficationsystem.NotyficationSystem.service.impl.ConfirmationTokenServiceImpl;
-import com.notyficationsystem.NotyficationSystem.service.impl.UserDetailsServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private ConfirmationTokenService confirmationTokenService;
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        return new ResponseEntity<>(userService.create(user), HttpStatus.CREATED);
-    }
+    private final UserService userService;
+    private final ConfirmationTokenService confirmationTokenService;
 
+    public UserController(UserService userService, ConfirmationTokenService confirmationTokenService) {
+        this.userService = userService;
+        this.confirmationTokenService = confirmationTokenService;
+    }
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.readById(id));
@@ -50,10 +44,10 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id) {
-        User existingUser = userService.readById(id);
-        existingUser.setEmail(userService.readById(id).getEmail());
-        existingUser.setFullname(userService.readById(id).getFullname());
+    public ResponseEntity<User> updateUser(@RequestBody User user) {
+        User existingUser = userService.readById(user.getId());
+        existingUser.setEmail(userService.readById(user.getId()).getEmail());
+        existingUser.setFullname(userService.readById(user.getId()).getFullname());
         confirmationTokenService.sendConfirmationTokenToUser(existingUser);
         return ResponseEntity.ok(userService.update(existingUser));
     }
