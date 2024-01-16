@@ -3,6 +3,7 @@ package com.notyficationsystem.NotyficationSystem.service.impl;
 import com.notyficationsystem.NotyficationSystem.exceptions.ConfirmationTokenNotSendException;
 import com.notyficationsystem.NotyficationSystem.model.User;
 import com.notyficationsystem.NotyficationSystem.service.ConfirmationTokenService;
+import com.notyficationsystem.NotyficationSystem.service.EmailService;
 import com.notyficationsystem.NotyficationSystem.service.JwtService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
 
     @Autowired
-    private EmailSenderServiceImpl emailService;
+    private EmailService emailService;
     @Autowired
     private JwtService jwtService;
     @Value("${network-address}")

@@ -1,9 +1,7 @@
 package com.notyficationsystem.NotyficationSystem.rest;
 
-import com.notyficationsystem.NotyficationSystem.model.Contact;
 import com.notyficationsystem.NotyficationSystem.model.User;
-import com.notyficationsystem.NotyficationSystem.service.MessageTemplateService;
-import com.notyficationsystem.NotyficationSystem.service.TelegramSenderService;
+import com.notyficationsystem.NotyficationSystem.service.*;
 import com.notyficationsystem.NotyficationSystem.service.impl.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -12,29 +10,22 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
 
 @RestController
 @Slf4j
 @RequestMapping("/")
 public class NotifyController {
-    private final UserServiceImpl userService;
-    private final ContactServiceImpl contactService;
-    private final EmailSenderServiceImpl emailSenderService;
-    private final CSVServiceImpl CSVservice;
-    private final MessageTemplateServiceImpl messageTemplateService;
-    private final TelegramSenderService telegramSenderService;
+    private final UserService userService;
+    private final KafkaEmailProducer emailProducer;
+    private final KafkaTelegramProducer telegramProducer;
+    private final CSVService CSVservice;
     private final MessageTemplateService templateService;
-
-    public NotifyController(UserServiceImpl userService, ContactServiceImpl contactService, EmailSenderServiceImpl emailSenderService, CSVServiceImpl csVservice, MessageTemplateServiceImpl messageTemplateService, TelegramSenderService telegramSenderService, MessageTemplateService templateService) {
+    public NotifyController(UserServiceImpl userService, CSVServiceImpl csVservice, MessageTemplateService templateService, KafkaEmailProducer emailProducer, KafkaTelegramProducer telegramProducer) {
         this.userService = userService;
-        this.contactService = contactService;
-        this.emailSenderService = emailSenderService;
-        CSVservice = csVservice;
-        this.messageTemplateService = messageTemplateService;
-        this.telegramSenderService = telegramSenderService;
+        this.CSVservice = csVservice;
         this.templateService = templateService;
+        this.emailProducer = emailProducer;
+        this.telegramProducer = telegramProducer;
     }
 
     @PostMapping(value = "exportAll")
@@ -53,22 +44,10 @@ public class NotifyController {
 
     @GetMapping("email/sendNotification")
     public ResponseEntity<?> notifyEmail(@RequestParam("message_id") Integer id, Authentication authentication){
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         log.info("ready to notify all contacts");
-        List<Contact> people = contactService.getAll();
-
-        for (Contact contact:
-                people) {
-            User checkUser = userService.readByEmail(userDetails.getUsername());
-            if (Objects.equals(checkUser.getId(), contact.getUser().getId())){
-                String textMessage = messageTemplateService.readById(Long.valueOf(id)).getTemplateText();
-                String finalText = textMessage.replace("{{username}}", checkUser.getFullname());
-                emailSenderService.sendEmail(contact.getEmail(),"Emergency Notify ", finalText);
-            }
-            else{
-                log.warn("this is not your contact "+contact.getEmail());
-            }
-        }
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User contactUser = userService.readByEmail(userDetails.getUsername());
+        emailProducer.notifyViaEmail(contactUser, id);
         return ResponseEntity.ok("Notification sent ");
     }
 
@@ -76,7 +55,7 @@ public class NotifyController {
     public ResponseEntity<?> sendNotification(@RequestParam("message_id") Integer id, Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User checkUser = userService.readByEmail(userDetails.getUsername());
-        telegramSenderService.sendEmail(checkUser.getUsername(), templateService.readById(Long.valueOf(id)));
+        telegramProducer.sendMessageViaTelegram(checkUser.getUsername(), templateService.readById(Long.valueOf(id)));
         return ResponseEntity.ok("Notification sent ");
     }
 
