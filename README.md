@@ -26,6 +26,7 @@ The Notification System Project provides a set of RESTful APIs for user authenti
 **Integration with Telegram Bot:** Contacts loaded from CSV files should subscribe by email provided by csv file sender to the Telegram bot to receive telegram notification *@EmergencyNotifierSystemBot* .
 
 example of telegram subscription :
+
 ![Снимок экрана 2024-01-17 в 17 46 24](https://github.com/nikitagagua/Notyfication-System/assets/110698480/7a5e641a-fd33-4a5d-94c7-84419bcc044f)
 
 
@@ -134,6 +135,7 @@ GET /notify/all - Notify all contacts both way.
 Notify via Telegram: 
 GET /telegram/sendNotification - Send a notification via Telegram.
 result example:
+
 ![Снимок экрана 2024-01-17 в 17 45 08](https://github.com/nikitagagua/Notyfication-System/assets/110698480/fe79f9fc-df61-4cc1-a3c6-250e9dc1a8b1)
 
 
@@ -141,6 +143,7 @@ Notify via Email:
 GET /email/sendNotification - Send a notification via Email.
 
 result example:
+
 ![Снимок экрана 2024-01-17 в 17 38 53](https://github.com/nikitagagua/Notyfication-System/assets/110698480/26f3e83d-a611-4a70-85b0-1951897fb2f8)
 
 
