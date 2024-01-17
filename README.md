@@ -1,15 +1,15 @@
-#Notification System Project
+# Notification System Project
 
 This is a notification system project built using the following technologies: Kafka, Docker, Flyway, Spring Security, JWT, Hibernate, Lombok and Spring Boot.
 
 ---
-#####Overview
+##### Overview
 
 The Notification System Project provides a set of RESTful APIs for user authentication, notification delivery, and management of templates and contacts. It utilizes Kafka for real-time messaging, Docker for containerization, Flyway for database migration, Spring Security with JWT for authentication, Hibernate for database interactions, and Spring Boot for the application framework.
 
 ---
 
-#####Key Features
+##### Key Features
 
 **User Authentication:** Users can authenticate themselves by providing their credentials through the login endpoint.
 
@@ -30,7 +30,7 @@ example of telegram subscription :
 
 
 ----
-#####Running the Project
+##### Running the Project
 
 *To run the project using Docker, follow these steps:*
 
@@ -43,7 +43,7 @@ docker-compose up -d
 ```
 ---
 
-#####Without Docker
+##### Without Docker
 *To run the project without Docker, follow these steps:*
 
 ```java
@@ -57,13 +57,13 @@ java -jar target/NotyficationSystem-0.0.1-SNAPSHOT.jar
 
 ----
 
-#####Accessing the APIs
+##### Accessing the APIs
 
 Once the project is running, you can access the APIs at http://localhost:8080 for the local application and http://localhost:8081 for the docker-based notification service.
 
 ---
 
-#####API Documentation
+##### API Documentation
 
 Below are some of the available endpoints and their descriptions:
 
@@ -93,7 +93,7 @@ for example:
 }
 ```
 
-######Register:
+###### Register:
 POST /auth/register - Register a new user with a username, email, and password.
 
 ```json
@@ -122,7 +122,7 @@ Result example if user confirmed:
 
 ----
 
-#####Notification Management
+##### Notification Management
 
 Export All: 
 
@@ -146,7 +146,7 @@ result example:
 
 ----
 
-#####User and Template Management
+##### User and Template Management
 Create Template:
 PUT /see-my-templates - Create a new notification template.
 
