@@ -1,4 +1,4 @@
-###Notification System Project
+#Notification System Project
 
 This is a notification system project built using the following technologies: Kafka, Docker, Flyway, Spring Security, JWT, Hibernate, Lombok and Spring Boot.
 
